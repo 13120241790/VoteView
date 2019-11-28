@@ -2,8 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="38dp"
-    android:layout_marginTop="10dp"
-    android:background="@drawable/option_bg"
     android:padding="0.5dp">
 
     <ProgressBar
@@ -11,7 +9,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:progressDrawable="@drawable/progress_view_bg" />
+        android:progressDrawable="@drawable/select_progress_view_bg" />
 
     <TextView
         android:id="@+id/name_text_view"
@@ -22,7 +20,7 @@
         android:ellipsize="end"
         android:maxLength="17"
         android:maxLines="1"
-        android:textColor="#00C0EB"
+        android:textColor="#8D9799"
         android:textSize="14sp"
         android:textStyle="bold" />
 
