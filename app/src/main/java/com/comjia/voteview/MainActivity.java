@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
         voteData.put("日本", 99);
 
         voteView.initVote(voteData);
+        voteView.setAnimationRate(600);
         voteView.setVoteListener(new VoteListener() {
             @Override
             public boolean onItemClick(View view, int index, boolean status) {
@@ -36,7 +37,7 @@ public class MainActivity extends Activity {
                 if (!status) {
                     showDialog(voteView, view);
                 } else {
-                    voteView.updateChildren(view, true);
+                    voteView.notifyUpdateChildren(view, true);
                 }
                 return true;
             }
@@ -49,7 +50,8 @@ public class MainActivity extends Activity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        voteView.updateChildren(view, false);
+                        voteView.resetNumbers();
+                        voteView.notifyUpdateChildren(view, false);
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override

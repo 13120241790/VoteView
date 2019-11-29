@@ -13,7 +13,13 @@ import java.util.Map;
 
 public class VoteView extends LinearLayout implements View.OnClickListener {
 
+    private VoteListener mVoteListener;
+
+    static long mAnimationRate = 650L;
+
     private int mTotal;
+
+    private List<Integer> currentNumbers = new ArrayList<>();
 
     private List<VoteObserver> voteObservers = new ArrayList<>();
 
@@ -50,12 +56,13 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
             index += 1;
             voteSubView.setContent(entry.getKey());
             voteSubView.setNumber(entry.getValue());
+            currentNumbers.add(entry.getValue());
             voteSubView.setTag(index);
             voteSubView.setOnClickListener(this);
             register(voteSubView);
             addView(voteSubView);
         }
-        setTotal(mTotal);
+        notifyTotalNumbers(mTotal);
         for (VoteObserver voteObserver : voteObservers) {//处理初始化 margin 问题
             VoteSubView voteSubView = (VoteSubView) voteObserver;
             LinearLayout.LayoutParams params = (LayoutParams) voteSubView.getLayoutParams();
@@ -64,8 +71,52 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
         }
     }
 
+    /**
+     * 投票器动效速率设置
+     *
+     * @param speed 取值范围 100毫秒 - 5000毫秒
+     */
+    public void setAnimationRate(long speed) {
+        if (speed > 100 && speed <= 5000) {
+            mAnimationRate = speed;
+        }
+    }
 
-    public void updateVote(List<Integer> numbers) {
+    /**
+     * 恢复初始各条目投票数目设置
+     */
+    public void resetNumbers() {
+        if (voteObservers.size() == currentNumbers.size()) {
+            for (int i = 0; i < voteObservers.size(); i++) {
+                VoteSubView subView = (VoteSubView) voteObservers.get(i);
+                subView.setNumber(currentNumbers.get(i));
+            }
+        }
+    }
+
+    /**
+     * 刷新每个子 view 的状态
+     *
+     * @param view   VoteSubView
+     * @param status
+     */
+    public void notifyUpdateChildren(View view, boolean status) {
+        for (VoteObserver voteObserver : voteObservers) {
+            voteObserver.update(view, status);
+        }
+    }
+
+    /**
+     * 投票器监听
+     */
+    public void setVoteListener(VoteListener voteListener) {
+        mVoteListener = voteListener;
+    }
+
+    /**
+     * 暂无启用需求
+     */
+    void updateVote(List<Integer> numbers) {
         if (numbers.size() != voteObservers.size()) {
             throw new IllegalArgumentException("Vote size error~!");
         }
@@ -75,26 +126,28 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
             mTotal += numbers.get(i);
             voteSubView.setNumber(numbers.get(i));
         }
-        setTotal(mTotal);
+        notifyTotalNumbers(mTotal);
     }
 
-    private void updateVoteNumber(int index, int number) {
-        for (int i = 0; i < voteObservers.size(); i++) {
-            if (index == i) {
-                VoteSubView voteSubView = (VoteSubView) voteObservers.get(i);
-                voteSubView.setNumber(number);
-            }
+    @Override
+    public void onClick(View view) {
+        if (mVoteListener != null) {
+            mVoteListener.onItemClick(view, (Integer) view.getTag(), !view.isSelected());
         }
+        //TODO 阻断功能
+//        boolean block = false;
+//        if (mVoteListener != null) {
+//            block = mVoteListener.onItemClick(view, (Integer) view.getTag(), !view.isSelected());
+//        }
+//        if (!block) {
+//            notifyUpdateChildren(view, !view.isSelected());
+//        }
     }
 
-    public void updateVote(LinkedHashMap<String, Integer> voteData) {
-        //TODO
-    }
-
-    private VoteListener mVoteListener;
-
-    public void setVoteListener(VoteListener voteListener) {
-        mVoteListener = voteListener;
+    private void notifyTotalNumbers(int total) {
+        for (VoteObserver voteObserver : voteObservers) {
+            voteObserver.setTotalNumber(total);
+        }
     }
 
     private void register(VoteObserver observer) {
@@ -104,29 +157,4 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
         voteObservers.add(observer);
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mVoteListener != null) {
-            mVoteListener.onItemClick(view, (Integer) view.getTag(), !view.isSelected());
-        }
-//        boolean block = false; //TODO 阻断设计选中状态存在问题
-//        if (mVoteListener != null) {
-//            block = mVoteListener.onItemClick(view, (Integer) view.getTag(), !view.isSelected());
-//        }
-//        if (!block) {
-//            updateChildren(view, !view.isSelected());
-//        }
-    }
-
-    public void updateChildren(View view, boolean status) {
-        for (VoteObserver voteObserver : voteObservers) {
-            voteObserver.update(view, status);
-        }
-    }
-
-    private void setTotal(int total) {
-        for (VoteObserver voteObserver : voteObservers) {
-            voteObserver.setTotalNumber(total);
-        }
-    }
 }

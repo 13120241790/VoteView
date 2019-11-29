@@ -75,7 +75,7 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
         objectAnimator = ObjectAnimator.ofFloat(numberView, "alpha", 1.0f);
         arrayAnimator[1] = objectAnimator;
         animatorSet.playTogether(arrayAnimator);
-        animatorSet.setDuration(800L);
+        animatorSet.setDuration(VoteView.mAnimationRate);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
             numberView.setVisibility(GONE);
             contentView.setTextColor(Color.parseColor("#8D9799"));
             contentView.setCompoundDrawables(null, null, null, null);
-            contentView.animate().translationX(0).setDuration(500L).start();
+            contentView.animate().translationX(0).setDuration(VoteView.mAnimationRate).start();
 
         }
     }
@@ -132,16 +132,11 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
         changeChildrenViewStatus(((int) view.getTag()) == getCurrentIndex());
         if (((int) view.getTag()) == getCurrentIndex()) {
             Log.e("update", "当前被点选的是:" + getCurrentIndex());
-            //TODO 选其他投票不准的问题
-//            if (status) {
-//                mCurrentNumber += 1;
-//                mTotalNumber += 1;
-//                numberView.setText(mCurrentNumber + "人");
-//            } else {
-//                mCurrentNumber -= 1;
-//                mTotalNumber -= 1;
-//                numberView.setText(mCurrentNumber + "人");
-//            }
+            if (status) {
+                mCurrentNumber += 1;
+                mTotalNumber += 1;
+                numberView.setText(mCurrentNumber + "人");
+            }
         }
         setSelected(status);
     }
@@ -156,7 +151,7 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
         numberFormat.setMaximumFractionDigits(3);
         float result = ((float) current / (float) total) * 100;
         Log.e("progressBarAnimation", "result" + Math.ceil(result));
-        ValueAnimator animator = ValueAnimator.ofInt(0, (int) Math.ceil(result)).setDuration(500L);
+        ValueAnimator animator = ValueAnimator.ofInt(0, (int) Math.ceil(result)).setDuration(VoteView.mAnimationRate);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -177,9 +172,9 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
         //数字颜色
         numberView.setTextColor(Color.parseColor(status ? "#00C0EB" : "#8D9799"));
         //带勾选框
-        Drawable right = getResources().getDrawable(R.mipmap.vote_selected);
+        Drawable right = getResources().getDrawable(status ? R.mipmap.vote_selected : R.mipmap.vote_empty);
         right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
-        contentView.setCompoundDrawables(null, null, status ? right : null, null);
+        contentView.setCompoundDrawables(null, null, right, null);
         //进度条颜色设置
         progressBar.setProgressDrawable(getResources().getDrawable(status ? R.drawable.select_progress_view_bg : R.drawable.unselect_progress_view_bg));
 
@@ -191,7 +186,4 @@ public class VoteSubView extends LinearLayout implements VoteObserver {
         setLayoutParams(params);
     }
 
-    public int getCurrentNumber() {
-        return mCurrentNumber;
-    }
 }
