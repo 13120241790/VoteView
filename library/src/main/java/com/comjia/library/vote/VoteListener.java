@@ -1,4 +1,4 @@
-package com.comjia.library.core;
+package com.comjia.library.vote;
 
 import android.view.View;
 

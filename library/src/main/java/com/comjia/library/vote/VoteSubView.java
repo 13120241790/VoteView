@@ -1,4 +1,4 @@
-package com.comjia.library.core;
+package com.comjia.library.vote;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 /**
  * 投票的子 view
  */
-public class VoteSubView extends LinearLayout implements VoteObserver {
+class VoteSubView extends LinearLayout implements VoteObserver {
 
     private ProgressBar progressBar;
 

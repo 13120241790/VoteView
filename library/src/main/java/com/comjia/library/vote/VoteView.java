@@ -1,4 +1,4 @@
-package com.comjia.library.core;
+package com.comjia.library.vote;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -98,7 +98,7 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
      * 刷新每个子 view 的状态
      *
      * @param view   VoteSubView
-     * @param status
+     * @param status 投票状态 or 未投票状态
      */
     public void notifyUpdateChildren(View view, boolean status) {
         for (VoteObserver voteObserver : voteObservers) {

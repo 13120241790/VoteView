@@ -13,7 +13,7 @@
         android:textSize="15dp"
         android:textStyle="bold" />
 
-    <com.comjia.library.core.VoteView
+    <com.comjia.library.vote.VoteView
         android:id="@+id/vote_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
