@@ -7,13 +7,15 @@ For Android&Java 一款简单易用的投票器 (仿新浪微博)
 
 Sina :
 
-![sinavote](./images/sinavote.gif)
+![sinavote](images/sinavote.gif)
 
 
 
 VoteView :
 
-![voteview](./images/voteview.gif)
+![voteview](images/voteview.gif)
+
+
 
 ### Usage
 
@@ -44,7 +46,7 @@ ava
 
 
 ```java
- 				final VoteView voteView = findViewById(R.id.vote_view);
+final VoteView voteView = findViewById(R.id.vote_view);
 
         LinkedHashMap<String, Integer> voteData = new LinkedHashMap<>();
 				//造数据源
