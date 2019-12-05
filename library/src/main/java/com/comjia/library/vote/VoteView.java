@@ -48,6 +48,7 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
         if (voteData.size() <= 1) {
             throw new IllegalArgumentException("Vote size error~!");
         }
+        removeAllViews();
         mTotal = 0;
         int index = -1;
         for (Map.Entry<String, Integer> entry : voteData.entrySet()) {
@@ -81,6 +82,7 @@ public class VoteView extends LinearLayout implements View.OnClickListener {
             mAnimationRate = speed;
         }
     }
+
 
     /**
      * 恢复初始各条目投票数目设置
